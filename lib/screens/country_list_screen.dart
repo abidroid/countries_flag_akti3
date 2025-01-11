@@ -7,6 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../models/country.dart';
 import 'package:http/http.dart' as http;
 
+import 'country_detail_screen.dart';
+
 class CountryListScreen extends StatefulWidget {
   const CountryListScreen({super.key});
 
@@ -65,26 +67,39 @@ class _CountryListScreenState extends State<CountryListScreen> {
               return ListView.builder(
                   itemCount: countries.length,
                   itemBuilder: (context, index) {
-
                     Country country = countries[index];
 
-                    return Card(
-                      color: Colors.amber,
-
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          spacing: 16,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 80,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: SvgPicture.network(country.flag!)),
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CountryDetailScreen(
+                              country: country,
                             ),
-                            Text(country.name!),
-                          ],
+                          ),
+                        );
+                      },
+                      child: Card(
+                        color: Colors.amber,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            spacing: 16,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                height: 80,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Hero(
+                                        
+                                        tag: country.name!,
+                                        child: SvgPicture.network(country.flag!))),
+                              ),
+                              Text(country.name!),
+                            ],
+                          ),
                         ),
                       ),
                     );
