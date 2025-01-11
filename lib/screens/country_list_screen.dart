@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../models/country.dart';
 import 'package:http/http.dart' as http;
@@ -59,13 +60,41 @@ class _CountryListScreenState extends State<CountryListScreen> {
       body: FutureBuilder<List<Country>>(
           future: getAllCountries(),
           builder: (context, snapshot) {
-            if( snapshot.hasData){
-
+            if (snapshot.hasData) {
               List<Country> countries = snapshot.data as List<Country>;
-              return Center(child: Text(countries.length.toString()),);
+              return ListView.builder(
+                  itemCount: countries.length,
+                  itemBuilder: (context, index) {
 
-            }else{
-              return Center(child: SpinKitWave(color: Colors.green,),);
+                    Country country = countries[index];
+
+                    return Card(
+                      color: Colors.amber,
+
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          spacing: 16,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 80,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: SvgPicture.network(country.flag!)),
+                            ),
+                            Text(country.name!),
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            } else {
+              return Center(
+                child: SpinKitWave(
+                  color: Colors.green,
+                ),
+              );
             }
           }),
     );
